@@ -115,10 +115,10 @@ const findTwoPairsIndexes = {
   },
 
   inputData() {
-    // this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
-    // this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
-    this.str1 = prompt('Желаемое количество чисел в массиве?', 5);
-    this.str2 = prompt('Числа через пробел?', '3 2 4 5 6');
+    this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
+    this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
+    // this.str1 = prompt('Желаемое количество чисел в массиве?', 5);
+    // this.str2 = prompt('Числа через пробел?', '3 2 4 5 6');
   },
 
   transformData() {
