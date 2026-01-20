@@ -78,58 +78,15 @@ const findTwoPairsIndexes = {
     }
 
     this.setPairIdxForMinPossible();
-    this.setPairIdxForMaxPossible();
+    // this.setPairIdxForMaxPossible();
 
   },
 
   setPairIdxForMinPossible() {
 
-    let sortNumbersInArrFromMinToMaxLength = this.sortNumbersInArrFromMinToMax.length;
-    for (let i = 0; i < sortNumbersInArrFromMinToMaxLength; i++) {
-      let minNum = this.sortNumbersInArrFromMinToMax[i];
-      let idxMinNum = this.numbersInArr.indexOf(minNum);
-      let quantityNumbersAfterMinNum = sortNumbersInArrFromMinToMaxLength - idxMinNum;
-
-      if (quantityNumbersAfterMinNum === 0) {
-        continue
-      }
-
-      let sliceArrAfterMinNum = [...this.numbersInArr].slice(idxMinNum);
-
-      let idxMaxNum = idxMinNum + sliceArrAfterMinNum.indexOf(Math.max(...sliceArrAfterMinNum));
-
-      this.pairIdxForMinPossible.push(idxMinNum + 1, idxMaxNum + 1);
-
-      return console.log(this.pairIdxForMinPossible);
-
-    }
-
   },
 
   setPairIdxForMaxPossible() {
-    let differenceArr = {};
-    let sortNumbersInArrFromMaxToMinLength = this.sortNumbersInArrFromMaxToMin.length;
-    for (let i = 0; i < sortNumbersInArrFromMaxToMinLength; i++) {
-      let maxNum = this.sortNumbersInArrFromMaxToMin[i];
-      let idxMaxNum = this.numbersInArr.indexOf(maxNum);
-      let quantityNumbersAfterMaxNum = sortNumbersInArrFromMaxToMinLength - idxMaxNum;
-
-      if (quantityNumbersAfterMaxNum === 0) {
-        continue
-      }
-
-      let sliceArrAfterMaxNum = [...this.numbersInArr].slice(idxMaxNum);
-
-      let idxMinNum = idxMaxNum + sliceArrAfterMaxNum.indexOf(Math.min(...sliceArrAfterMaxNum));
-
-      // this.pairIdxForMaxPossible.push(idxMaxNum + 1, idxMinNum + 1);
-
-      differenceArr[`${idxMaxNum}_${idxMinNum}`] = this.numbersInArr[idxMaxNum] - this.numbersInArr[idxMinNum];
-
-      // return console.log(this.pairIdxForMaxPossible);
-
-    }
-    console.log(differenceArr);
 
   },
 
