@@ -64,9 +64,6 @@ const findTwoPairsIndexes = {
     this.sortNumbersInArrFromMinToMax = [...this.numbersInArr].sort((a, b) => a - b);
     this.sortNumbersInArrFromMaxToMin = [...this.sortNumbersInArrFromMinToMax].reverse();
 
-    console.log(this.str1);
-    console.log(this.str2);
-
     console.log(this.quantityNumbersInArr);
     console.log(this.numbersInArr);
 
@@ -80,60 +77,59 @@ const findTwoPairsIndexes = {
       return
     }
 
-    // this.setPairIdxForMinPossible();
+    this.setPairIdxForMinPossible();
     this.setPairIdxForMaxPossible();
-
 
   },
 
-  // setPairIdxForMinPossible() {
-  //   for (let i = 0; i < this.sortNumbersInArrFromMinToMax.length; i++) {
-  //     let minNum = this.sortNumbersInArrFromMinToMax[i];
-  //     let maxNum = this.sortNumbersInArrFromMaxToMin[i];
-  //     let idxMinNum = this.numbersInArr.indexOf(minNum);
-  //     let idxMaxNum = this.numbersInArr.indexOf(maxNum);
+  setPairIdxForMinPossible() {
 
-  //     if (idxMinNum < idxMaxNum) {
-  //       this.pairIdxForMinPossible.push(idxMinNum + 1, idxMaxNum + 1);
-  //       return console.log(this.pairIdxForMinPossible);
-  //     }
+    let sortNumbersInArrFromMinToMaxLength = this.sortNumbersInArrFromMinToMax.length;
+    for (let i = 0; i < sortNumbersInArrFromMinToMaxLength; i++) {
+      let minNum = this.sortNumbersInArrFromMinToMax[i];
+      let idxMinNum = this.numbersInArr.indexOf(minNum);
+      let quantityNumbersAfterMinNum = sortNumbersInArrFromMinToMaxLength - idxMinNum;
 
-  //   }
+      if (quantityNumbersAfterMinNum === 0) {
+        continue
+      }
 
-  // },
+      let sliceArrAfterMinNum = [...this.numbersInArr].slice(idxMinNum);
 
-  /**
-   * 2 1 3 5 2 4
-   * 2 4
-   * 4 5
-   * 
-   * [5, 4, 3, 2, 2, 1]
-   */
+      let idxMaxNum = idxMinNum + sliceArrAfterMinNum.indexOf(Math.max(...sliceArrAfterMinNum));
+
+      this.pairIdxForMinPossible.push(idxMinNum + 1, idxMaxNum + 1);
+
+      return console.log(this.pairIdxForMinPossible);
+
+    }
+
+  },
+
   setPairIdxForMaxPossible() {
+    let differenceArr = {};
     let sortNumbersInArrFromMaxToMinLength = this.sortNumbersInArrFromMaxToMin.length;
     for (let i = 0; i < sortNumbersInArrFromMaxToMinLength; i++) {
-      // let minNum = this.sortNumbersInArrFromMinToMax[i];
-      let maxNum = this.sortNumbersInArrFromMaxToMin[i]; //5
-      // let idxMinNum = this.numbersInArr.indexOf(minNum); 
-      let idxMaxNum = this.numbersInArr.indexOf(maxNum); //3
+      let maxNum = this.sortNumbersInArrFromMaxToMin[i];
+      let idxMaxNum = this.numbersInArr.indexOf(maxNum);
       let quantityNumbersAfterMaxNum = sortNumbersInArrFromMaxToMinLength - idxMaxNum;
 
       if (quantityNumbersAfterMaxNum === 0) {
         continue
       }
 
-      let sliceArrAfterMaxNum = [...this.numbersInArr].slice(idxMaxNum); //2 4
-      
-      sliceArrAfterMaxNum.indexOf(Math.min(...sliceArrAfterMaxNum));
+      let sliceArrAfterMaxNum = [...this.numbersInArr].slice(idxMaxNum);
 
-      console.log(maxNum, sliceArrAfterMaxNum);
+      let idxMinNum = idxMaxNum + sliceArrAfterMaxNum.indexOf(Math.min(...sliceArrAfterMaxNum));
 
-      // if (idxMaxNum < idxMinNum) {
-      //   this.pairIdxForMaxPossible.push(idxMaxNum + 1, idxMinNum + 1);
-      //   return console.log(this.pairIdxForMaxPossible);
-      // }
+      // this.pairIdxForMaxPossible.push(idxMaxNum + 1, idxMinNum + 1);
+
+      differenceArr[`${idxMaxNum}_${idxMinNum}`] = this.numbersInArr[idxMaxNum] - this.numbersInArr[idxMinNum];
+
+      // return console.log(this.pairIdxForMaxPossible);
 
     }
+    console.log(differenceArr);
 
   },
 
@@ -161,8 +157,10 @@ const findTwoPairsIndexes = {
   },
 
   inputData() {
-    this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
-    this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
+    // this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
+    // this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
+    this.str1 = prompt('Желаемое количество чисел в массиве?', 5);
+    this.str2 = prompt('Числа через пробел?', '3 2 4 5 6');
   },
 
   transformData() {
