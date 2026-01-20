@@ -83,7 +83,13 @@ const findTwoPairsIndexes = {
   },
 
   setPairIdxForMinPossible() {
+    for (let i = 0; i < this.sortNumbersInArrFromMaxToMin.length; i++) {
+     console.log(i, this.isIdxMaxNumLessIdxMinNum(i));
+    }
+  },
 
+  isIdxMaxNumLessIdxMinNum(i) {
+    return this.numbersInArr.indexOf(this.sortNumbersInArrFromMaxToMin[i]) < this.numbersInArr.indexOf(this.sortNumbersInArrFromMinToMax[0]);
   },
 
   setPairIdxForMaxPossible() {
