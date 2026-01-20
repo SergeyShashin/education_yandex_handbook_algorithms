@@ -77,23 +77,42 @@ const findTwoPairsIndexes = {
       return
     }
 
-    this.setPairIdxForMinPossible();
+    this.setPairIdxForMaxPossible();
     // this.setPairIdxForMaxPossible();
 
   },
 
   setPairIdxForMinPossible() {
+
+  },
+
+  setPairIdxForMaxPossible() {
     for (let i = 0; i < this.sortNumbersInArrFromMaxToMin.length; i++) {
-     console.log(i, this.isIdxMaxNumLessIdxMinNum(i));
+      console.log(i, this.isIdxMaxNumLessIdxMinNum(i));
+      console.log(this.isNumberSingular(i));
+
+      if (this.isIdxMaxNumLessIdxMinNum(i) && this.isNumberSingular(i)) {
+        console.log(this.getIdxMaxNum(i) + 1, this.getIdxMinNum(i) + 1);
+        this.pairIdxForMaxPossible.push(this.getIdxMaxNum(i) + 1, this.getIdxMinNum(i) + 1);
+        return console.log(this.pairIdxForMaxPossible);
+      }
     }
+  },
+
+  getIdxMaxNum(i) {
+    return this.numbersInArr.indexOf(this.sortNumbersInArrFromMaxToMin[i]);
+  },
+
+  getIdxMinNum(i) {
+    return this.numbersInArr.indexOf(Math.min(...this.sortNumbersInArrFromMaxToMin.slice(i + 1)));
   },
 
   isIdxMaxNumLessIdxMinNum(i) {
     return this.numbersInArr.indexOf(this.sortNumbersInArrFromMaxToMin[i]) < this.numbersInArr.indexOf(this.sortNumbersInArrFromMinToMax[0]);
   },
 
-  setPairIdxForMaxPossible() {
-
+  isNumberSingular(i) {
+    return this.sortNumbersInArrFromMaxToMin.slice(i + 1).indexOf(this.sortNumbersInArrFromMaxToMin[i]) === -1;
   },
 
   validation() {
@@ -120,10 +139,10 @@ const findTwoPairsIndexes = {
   },
 
   inputData() {
-    // this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
-    // this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
-    this.str1 = prompt('Желаемое количество чисел в массиве?', 5);
-    this.str2 = prompt('Числа через пробел?', '3 2 4 5 6');
+    this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
+    this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
+    // this.str1 = prompt('Желаемое количество чисел в массиве?', 5);
+    // this.str2 = prompt('Числа через пробел?', '3 2 4 5 6');
   },
 
   transformData() {
