@@ -46,20 +46,62 @@ const findTwoPairsIndices = {
   str2: null,
   quantityNumbersInArr: null,
   numbersInArr: [],
+  sortNumbersInArrFromMinToMax: null,
+  settings: {
+    minQuantityNumbersInArr: 3,
+    maxQuantityNumbersInArr: 10 ** 5,
+    minNumberInArr: 1,
+    maxNumberInArr: 10 ** 5
+  },
 
   run() {
     this.inputData();
     this.transformData();
+    this.sortNumbersInArrFromMinToMax = [...this.numbersInArr];
+    this.sortNumbersInArrFromMinToMax.sort((a, b) => a - b);
 
     console.log(this.str1);
     console.log(this.str2);
 
     console.log(this.quantityNumbersInArr);
     console.log(this.numbersInArr);
+
+    console.log(this.sortNumbersInArrFromMinToMax);
+
+    let resultValidation = this.validation();
+
+    if (resultValidation.length > 0) {
+      resultValidation.map(msg => console.error(msg));
+      return
+    }
+
+  },
+
+  validation() {
+    let result = [];
+
+    if (this.quantityNumbersInArr < this.settings.minQuantityNumbersInArr) {
+      result.push(`Желаемое количество чисел в массиве = ${this.quantityNumbersInArr}, а ожидается больше ${this.settings.minQuantityNumbersInArr}.`);
+    }
+
+    if (this.quantityNumbersInArr > 10 ** 5) {
+      result.push(`Желаемое количество чисел в массиве = ${this.quantityNumbersInArr}, а ожидается меньше ${this.settings.minQuantityNumbersInArr}.`);
+    }
+
+    if (this.sortNumbersInArrFromMinToMax[0] < this.settings.minNumberInArr) {
+      result.push(`Минимальное число в массиве = ${this.numbersInArr}, а ожидается больше ${this.settings.minNumberInArr - 1}.`);
+    }
+
+    if (this.sortNumbersInArrFromMinToMax[this.sortNumbersInArrFromMinToMax.length - 1] > this.settings.maxNumberInArr) {
+      result.push(`Минимальное число в массиве = ${this.sortNumbersInArrFromMinToMax[this.sortNumbersInArrFromMinToMax.length - 1]}, а ожидается меньше ${this.settings.maxNumberInArr + 1}.`);
+    }
+
+    return result
+
   },
 
   inputData() {
-    this.str1 = prompt('Количество чисел в массиве?', 8);
+    this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
     this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
   },
 
