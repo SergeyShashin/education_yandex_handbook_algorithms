@@ -47,6 +47,10 @@ const findTwoPairsIndices = {
   quantityNumbersInArr: null,
   numbersInArr: [],
   sortNumbersInArrFromMinToMax: null,
+  sortNumbersInArrFromMaxToMin: null,
+  pairIdxForMinPossible: [],
+  pairIdxForMaxPossible: [],
+
   settings: {
     minQuantityNumbersInArr: 3,
     maxQuantityNumbersInArr: 10 ** 5,
@@ -57,8 +61,8 @@ const findTwoPairsIndices = {
   run() {
     this.inputData();
     this.transformData();
-    this.sortNumbersInArrFromMinToMax = [...this.numbersInArr];
-    this.sortNumbersInArrFromMinToMax.sort((a, b) => a - b);
+    this.sortNumbersInArrFromMinToMax = [...this.numbersInArr].sort((a, b) => a - b);
+    this.sortNumbersInArrFromMaxToMin = [...this.sortNumbersInArrFromMinToMax].reverse();
 
     console.log(this.str1);
     console.log(this.str2);
@@ -67,12 +71,49 @@ const findTwoPairsIndices = {
     console.log(this.numbersInArr);
 
     console.log(this.sortNumbersInArrFromMinToMax);
+    console.log(this.sortNumbersInArrFromMaxToMin);
 
     let resultValidation = this.validation();
 
     if (resultValidation.length > 0) {
       resultValidation.map(msg => console.error(msg));
       return
+    }
+
+    this.setPairIdxForMinPossible();
+    this.setPairIdxForMaxPossible();
+
+
+  },
+
+  setPairIdxForMinPossible() {
+    for (let i = 0; i < this.sortNumbersInArrFromMinToMax.length; i++) {
+      let minNum = this.sortNumbersInArrFromMinToMax[i];
+      let maxNum = this.sortNumbersInArrFromMaxToMin[i];
+      let idxMinNum = this.numbersInArr.indexOf(minNum);
+      let idxMaxNum = this.numbersInArr.indexOf(maxNum);
+
+      if (idxMinNum < idxMaxNum) {
+        this.pairIdxForMinPossible.push(idxMinNum + 1, idxMaxNum + 1);
+        return console.log(this.pairIdxForMinPossible);
+      }
+
+    }
+
+  },
+
+  setPairIdxForMaxPossible() {
+    for (let i = 0; i < this.sortNumbersInArrFromMinToMax.length; i++) {
+      let minNum = this.sortNumbersInArrFromMinToMax[i];
+      let maxNum = this.sortNumbersInArrFromMaxToMin[i];
+      let idxMinNum = this.numbersInArr.indexOf(minNum);
+      let idxMaxNum = this.numbersInArr.indexOf(maxNum);
+
+      if (idxMaxNum < idxMinNum) {
+        this.pairIdxForMaxPossible.push(idxMaxNum + 1, idxMinNum + 1);
+        return console.log(this.pairIdxForMaxPossible);
+      }
+
     }
 
   },
