@@ -41,7 +41,7 @@
  * 1 2 
  */
 
-const findTwoPairsIndices = {
+const findTwoPairsIndexes = {
   str1: null,
   str2: null,
   quantityNumbersInArr: null,
@@ -116,8 +116,16 @@ const findTwoPairsIndices = {
       let maxNum = this.sortNumbersInArrFromMaxToMin[i]; //5
       // let idxMinNum = this.numbersInArr.indexOf(minNum); 
       let idxMaxNum = this.numbersInArr.indexOf(maxNum); //3
-      let quantityNumbersAfterMaxNum =
-        let sliceArrAfterMaxNum = [...this.numbersInArr].slice(idxMaxNum); //2 4
+      let quantityNumbersAfterMaxNum = sortNumbersInArrFromMaxToMinLength - idxMaxNum;
+
+      if (quantityNumbersAfterMaxNum === 0) {
+        continue
+      }
+
+      let sliceArrAfterMaxNum = [...this.numbersInArr].slice(idxMaxNum); //2 4
+      
+      sliceArrAfterMaxNum.indexOf(Math.min(...sliceArrAfterMaxNum));
+
       console.log(maxNum, sliceArrAfterMaxNum);
 
       // if (idxMaxNum < idxMinNum) {
@@ -163,7 +171,7 @@ const findTwoPairsIndices = {
   }
 };
 
-findTwoPairsIndices.run();
+findTwoPairsIndexes.run();
 
 
 
