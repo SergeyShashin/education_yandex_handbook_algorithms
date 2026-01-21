@@ -150,8 +150,8 @@ const findTwoPairsIndexes = {
 
 };
 
-// findTwoPairsIndexes.run(prompt('Желаемое количество чисел в массиве?', 6), prompt('Числа через пробел?', '2 1 3 5 2 4')); // 2 4   4 5
-findTwoPairsIndexes.run(prompt('Желаемое количество чисел в массиве?', 5), prompt('Числа через пробел?', '3 2 4 5 6')); // 2 5    1 2
+findTwoPairsIndexes.run(prompt('Желаемое количество чисел в массиве?', 6), prompt('Числа через пробел?', '2 1 3 5 2 4')); // 2 4   4 5
+findTwoPairsIndexes.run(prompt('Желаемое количество чисел в массиве?', 5), prompt('Числа через пробел?', '3 2 4 5 6')); // 2 5   1 2
 
 
 
