@@ -42,14 +42,15 @@
  */
 
 const findTwoPairsIndexes = {
-  str1: null,
-  str2: null,
   quantityNumbersInArr: null,
   numbersInArr: [],
-  sortNumbersInArrFromMinToMax: null,
-  sortNumbersInArrFromMaxToMin: null,
-  pairIdxForMinPossible: [],
-  pairIdxForMaxPossible: [],
+  minNumber: null,
+  maxNumber: null,
+  resultValidation: null,
+  minPossible: 0,
+  maxPossible: 0,
+  pairIdxForMinPossible: '',
+  pairIdxForMaxPossible: '',
 
   settings: {
     minQuantityNumbersInArr: 3,
@@ -58,38 +59,70 @@ const findTwoPairsIndexes = {
     maxNumberInArr: 10 ** 5
   },
 
-  run() {
-    this.inputData();
-    this.transformData();
-    this.sortNumbersInArrFromMinToMax = [...this.numbersInArr].sort((a, b) => a - b);
-    this.sortNumbersInArrFromMaxToMin = [...this.sortNumbersInArrFromMinToMax].reverse();
+  run(str1, str2) {
+    this.init(str1, str2);
 
-    console.log(this.quantityNumbersInArr);
-    console.log(this.numbersInArr);
-
-    console.log(this.sortNumbersInArrFromMinToMax);
-    console.log(this.sortNumbersInArrFromMaxToMin);
-
-    let resultValidation = this.validation();
-
-    if (resultValidation.length > 0) {
-      resultValidation.map(msg => console.error(msg));
+    if (!this.isValid()) {
+      this.resultValidation.map(msg => console.error(msg));
       return
     }
 
-    this.setPairIdxForMaxPossible();
-    // this.setPairIdxForMaxPossible();
+    this.setPairIdxForMinAndForMaxPossible();
+    this.output();
+  },
+
+  init(str1, str2) {
+    this.quantityNumbersInArr = Number(str1);
+    this.minNumber = Number(str2[0]);
+    this.maxNumber = this.minNumber;
+
+    str2.split(' ').map(char => {
+      let number = Number(char);
+      if (number < this.minNumber) {
+        this.minNumber = number;
+      }
+
+      if (number > this.maxNumber) {
+        this.maxNumber = number;
+      }
+
+      this.numbersInArr.push(number);
+    });
+
+    this.resultValidation = this.validation();
 
   },
 
-  setPairIdxForMinPossible() {
-
+  isValid() {
+    return this.resultValidation.length === 0
   },
 
-  setPairIdxForMaxPossible() {
-    
+  outpuErrors() {
+    this.resultValidation.map(msg => console.error(msg));
   },
- 
+
+  setPairIdxForMinAndForMaxPossible() {
+    for (let i = 0; i + 1 < this.numbersInArr.length; i++) {
+      for (let j = i + 1; j < this.numbersInArr.length; j++) {
+        let difference = this.numbersInArr[i] - this.numbersInArr[j];
+
+        if (difference < this.minPossible) {
+          this.minPossible = difference;
+          this.pairIdxForMinPossible = `${i + 1} ${j + 1}`;
+        }
+
+        if (difference > this.maxPossible) {
+          this.maxPossible = difference;
+          this.pairIdxForMaxPossible = `${i + 1} ${j + 1}`;
+        }
+      }
+    }
+  },
+
+  output() {
+    console.log(this.pairIdxForMinPossible);
+    console.log(this.pairIdxForMaxPossible);
+  },
 
   validation() {
     let result = [];
@@ -102,32 +135,23 @@ const findTwoPairsIndexes = {
       result.push(`Желаемое количество чисел в массиве = ${this.quantityNumbersInArr}, а ожидается меньше ${this.settings.minQuantityNumbersInArr}.`);
     }
 
-    if (this.sortNumbersInArrFromMinToMax[0] < this.settings.minNumberInArr) {
-      result.push(`Минимальное число в массиве = ${this.numbersInArr}, а ожидается больше ${this.settings.minNumberInArr - 1}.`);
+    if (this.minNumber < this.settings.minNumberInArr) {
+      result.push(`Минимальное число в массиве = ${this.minNumber}, а ожидается больше ${this.settings.minNumberInArr - 1}.`);
     }
 
-    if (this.sortNumbersInArrFromMinToMax[this.sortNumbersInArrFromMinToMax.length - 1] > this.settings.maxNumberInArr) {
-      result.push(`Минимальное число в массиве = ${this.sortNumbersInArrFromMinToMax[this.sortNumbersInArrFromMinToMax.length - 1]}, а ожидается меньше ${this.settings.maxNumberInArr + 1}.`);
+    if (this.maxNumber > this.settings.maxNumberInArr) {
+      result.push(`Максимальное число в массиве = ${this.maxNumber}, а ожидается меньше ${this.settings.maxNumberInArr + 1}.`);
     }
 
     return result
 
   },
 
-  inputData() {
-    this.str1 = prompt('Желаемое количество чисел в массиве?', 8);
-    this.str2 = prompt('Числа через пробел?', '2 1 3 5 2 4');
-    // this.str1 = prompt('Желаемое количество чисел в массиве?', 5);
-    // this.str2 = prompt('Числа через пробел?', '3 2 4 5 6');
-  },
 
-  transformData() {
-    this.quantityNumbersInArr = Number(this.str1);
-    this.str2.split(' ').forEach(char => this.numbersInArr.push(Number(char)));
-  }
 };
 
-findTwoPairsIndexes.run();
+// findTwoPairsIndexes.run(prompt('Желаемое количество чисел в массиве?', 6), prompt('Числа через пробел?', '2 1 3 5 2 4')); // 2 4   4 5
+findTwoPairsIndexes.run(prompt('Желаемое количество чисел в массиве?', 5), prompt('Числа через пробел?', '3 2 4 5 6')); // 2 5    1 2
 
 
 
