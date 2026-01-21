@@ -44,12 +44,20 @@
 */
 
 let str1 = prompt('Количество чисел в массиве и количество запросов через пробел?', '5 4');
-let str2 = prompt('Числа разделены пробелами?', '5 4');
-let q1=1;
-let q2=2;
-let q3=4;
-let q4=6;
+let str2 = prompt('Числа разделены пробелами?', '4 2 1 5 2');
+let q1 = +prompt('Запрос1', 1);
+let q2 = +prompt('Запрос2', 2);
+let q3 = +prompt('Запрос3', 4);
+let q4 = +prompt('Запрос3', 6);
 
-// let quantityNumbersAndQuantityQueries
+let quantityNumbersAndQuantityQueries = [];
+let numbersInArr = [];
+str1.split(' ').map(el => quantityNumbersAndQuantityQueries.push(Number(el)));
+str2.split(' ').map(el => numbersInArr.push(Number(el)));
+let [quantityNumbers, quantityQueries] = quantityNumbersAndQuantityQueries;
 
-// for(let i=1; str)
+
+console.log(numbersInArr.indexOf(q1) === -1 ? -1 : numbersInArr.indexOf(q1) + 1); //3
+console.log(numbersInArr.indexOf(q2) === -1 ? -1 : numbersInArr.indexOf(q2) + 1); //2
+console.log(numbersInArr.indexOf(q3) === -1 ? -1 : numbersInArr.indexOf(q3) + 1); //1
+console.log(numbersInArr.indexOf(q4) === -1 ? -1 : numbersInArr.indexOf(q4) + 1); //-1
