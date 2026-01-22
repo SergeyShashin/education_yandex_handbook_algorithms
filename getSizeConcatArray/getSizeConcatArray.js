@@ -43,19 +43,28 @@
 
 */
 
-const example1 = {
-  quantityArrayUnicue: prompt('Количество множеств?', 3)
-}
+let dataForExample1 = [
+  [1, 2, 3],
+  [2, 4, 5, 6],
+  [1, 7]
+];
+
+let dataForExample2 = [
+  [10, 20],
+  [5, 10, 15],
+  [100],
+  [15, 20, 25],
+];
 
 const getSizeConcatArray = {
-  settings: {
-
-  },
-
-  run() {
-
+  run(data) {
+    const result = [];
+    data.map(row => {
+      console.log(row);
+      result.concat(row)
+    });
+    return console.log(result.length);
   }
-
 };
 
-getSizeConcatArray.run();
+getSizeConcatArray.run(dataForExample1);
