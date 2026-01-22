@@ -15,9 +15,14 @@ const dataForExample2 = [
 const getSizeCrossingArrayUnicue = {
   result: null,
   run(data) {
+    this.obj = {};
     this.result = {};
-    data.map(row => row.map(num => {
-      this.result[num] ? this.result[num]++ : this.result[num] = 1;
+    data.map((row, idx) => row.map(num => {
+      if (this.obj[num]) {
+        this.obj[num]++;
+      } else {
+        this.obj[num] = idx;
+      }
     }
     ));
 
