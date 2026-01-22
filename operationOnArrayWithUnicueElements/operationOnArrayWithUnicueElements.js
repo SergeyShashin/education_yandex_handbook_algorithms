@@ -74,34 +74,34 @@ let data = [
   '2 7',
 ];
 
+let expectedOutput = '01011';
+let result = '';
 let errors = [];
-
 let q = Number(prompt('Количество запросов?', 9));
+let arrayWithUnicueElements = [];
 
 validationQ(q);
 
 if (isValid()) {
 
-  let arrayWithUnicueElements = [];
-
   for (let i = 1; i < q + 1; i++) {
     let query = prompt('Код запроса и значение через пробел?', data[i - 1]);
     let [codeQuery, value] = query.split(' ');
+
     validationValue(Number(value));
-    switch (codeQuery) {
-      case '1':
-        arrayWithUnicueElements.push(value);
-        break;
-      case '2':
-        console.log(arrayWithUnicueElements.includes(value) ? '1' : '0');
-        break;
-      default: console.log(`Запроса ${codeQuery} пока нет.`);
+
+    if (!isValid()) {
+      break;
     }
+
+    implementation(codeQuery, value);
+
   }
+
+  output(result);
 }
 
 errors.map(err => console.error(err));
-
 
 function validationQ(q) {
   if (q < settings.minQ) {
@@ -125,5 +125,31 @@ function validationValue(value) {
 
 function isValid() {
   return errors.length === 0
+}
+
+function implementation(codeQuery, value) {
+
+  switch (codeQuery) {
+    case '1':
+      arrayWithUnicueElements.push(value);
+      break;
+    case '2':
+      if (arrayWithUnicueElements.includes(value)) {
+        // console.log('1');
+        result += '1';
+      } else {
+        // console.log('0');
+        result += '0';
+      }
+      // console.log(arrayWithUnicueElements.includes(value) ? '1' : '0');
+      break;
+    default: console.log(`Запроса ${codeQuery} пока нет.`);
+  }
+
+}
+
+function output(result) {
+  console.log(expectedOutput === result ? 'Ожидаемый и реальный результаты совпадают)' : 'Что-то случилось.');
+  console.log(result);
 }
 
