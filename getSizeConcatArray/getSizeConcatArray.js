@@ -57,14 +57,15 @@ let dataForExample2 = [
 ];
 
 const getSizeConcatArray = {
+  result: null,
   run(data) {
-    const result = [];
+    this.result = [];
     data.map(row => {
-      console.log(row);
-      result.concat(row)
+      this.result.push(...row);
     });
-    return console.log(result.length);
+    console.log(new Set(this.result).size);
   }
 };
 
 getSizeConcatArray.run(dataForExample1);
+getSizeConcatArray.run(dataForExample2);
