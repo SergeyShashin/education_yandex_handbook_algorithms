@@ -66,6 +66,7 @@ document.getElementById('loadInput').addEventListener('change', e => handleLoadF
 const sunFlower = {
   inputData: null,
   quantityArraysUnicue: null,
+  // sizeArraysUnicue
   arraysUnicue: null,
   run(data) {
     this.inputData = data;
@@ -75,7 +76,8 @@ const sunFlower = {
         ? this.sizeArraysUnicue = Number(raw[0])
         : raw.split(' ').map((char, idxInRaw) => {
           idxInRaw === 0
-            ? this.arraysUnicue[idx]
+            ? ''
+            : this.arraysUnicue[idx]=Number(char)
 
         });
 
