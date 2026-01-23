@@ -64,8 +64,22 @@ NO
 document.getElementById('loadInput').addEventListener('change', e => handleLoadFile(e));
 
 const sunFlower = {
+  inputData: null,
+  quantityArraysUnicue: null,
+  arraysUnicue: null,
   run(data) {
-    console.log(data);
+    this.inputData = data;
+    this.arraysUnicue = {};
+    this.inputData.split(' ').map((raw, strNum) => {
+      strNum === 0
+        ? this.sizeArraysUnicue = Number(raw[0])
+        : raw.split(' ').map((char, idxInRaw) => {
+          idxInRaw === 0
+            ? this.arraysUnicue[idx]
+
+        });
+
+    });
   }
 };
 
