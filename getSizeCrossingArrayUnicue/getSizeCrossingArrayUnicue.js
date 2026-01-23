@@ -13,20 +13,27 @@ const dataForExample2 = [
 ];
 
 const getSizeCrossingArrayUnicue = {
+  obj: null,
   result: null,
+  dataLength: null,
+  
   run(data) {
     this.obj = {};
-    this.result = {};
+    this.dataLength = data.length;
+    this.result = 0;
+
     data.map((row, idx) => row.map(num => {
       if (this.obj[num]) {
-        this.obj[num]++;
+        this.obj[num].push(idx);
       } else {
-        this.obj[num] = idx;
+        this.obj[num] = [idx];
       }
     }
     ));
 
-    console.log(this.result);
+    Object.values(this.obj).map(arrWithIdx => arrWithIdx.length === data.length ? this.result++ : '');
+
+    console.log(`Размер пересечения всех данных множеств = ${this.result}.`);
   }
 }
 
