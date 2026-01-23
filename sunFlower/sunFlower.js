@@ -59,3 +59,23 @@ YES
 NO
 
 */
+// import { stdin, stdout } from 'node:process';
+
+// const { stdin: input, stdout: output } = require('node:process');
+// console.log(stdin.input);
+
+document.getElementById('loadInput').addEventListener('change', e => handleLoadFile(e));
+
+function handleLoadFile(e) {
+  console.log(e.target.files[0].lastModified);
+
+  let reader = new FileReader();
+  // console.log(reader.readAsArrayBuffer(e.target.files[0]));
+  reader.readAsText(e.target.files[0]);
+  // reader.readAsArrayBuffer(e.target.files[0]);
+  
+  reader.onload = function () {
+    console.log(reader.result);
+  };
+
+}
