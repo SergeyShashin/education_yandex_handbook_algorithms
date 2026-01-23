@@ -66,22 +66,48 @@ document.getElementById('loadInput').addEventListener('change', e => handleLoadF
 const sunFlower = {
   inputData: null,
   quantityArraysUnicue: null,
-  // sizeArraysUnicue
-  arraysUnicue: null,
+  sizesArraysUnicue: null,
+  objWithArraysUnicue: null,
+  validationMsgs: null,
+  setings: {
+    minQuantityArraysUnicue: 2,
+    maxQuantityArraysUnicue: 200000,
+  },
   run(data) {
     this.inputData = data;
-    this.arraysUnicue = {};
-    this.inputData.split(' ').map((raw, strNum) => {
+    this.objWithArraysUnicue = {};
+    this.sizesArraysUnicue = [];
+    this.validationMsgs = [];
+    this.inputData.split('_').map((raw, strNum) => {
       strNum === 0
-        ? this.sizeArraysUnicue = Number(raw[0])
+        ? this.quantityArraysUnicue = Number(raw)
         : raw.split(' ').map((char, idxInRaw) => {
           idxInRaw === 0
-            ? ''
-            : this.arraysUnicue[idx]=Number(char)
-
+            ? this.sizesArraysUnicue.push(Number(char))
+            : this.objWithArraysUnicue[strNum] ? this.objWithArraysUnicue[strNum].push(Number(char)) : this.objWithArraysUnicue[strNum] = [Number(char)];
         });
 
     });
+
+    console.log('Входные данные\n', this.inputData);
+    console.log('Количество множеств', this.quantityArraysUnicue);
+    console.log('Размры множеств', this.sizesArraysUnicue);
+    console.log(this.objWithArraysUnicue);
+
+    this.validation();
+    console.log(this.validationMsgs);
+  },
+  validation() {
+    // Первая строка содержит целое число n (2<=n<=2*10**5) - количество множеств.
+    // Далее следуют n строк: в i-ой строке сначала дано k[i] (0<=k[i]<=2*10**5) - размеры множества, затем
+    // k[i], различных чисел x (1<=x<=10**9) - элементы Si.
+    // Гарантируется, что суммарное число всех элементов k[i] <= 2*10**5.
+    this.quantityArraysUnicue < this.setings.minQuantityArraysUnicue
+      ? this.validationMsgs.push(`Минимальное количество множеств ожидается больше ${this.setings.minQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
+      : '';
+    this.quantityArraysUnicue > this.setings.maxQuantityArraysUnicue
+      ? this.validationMsgs.push(`Максимальное количество множеств ожидается меньше ${this.setings.maxQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
+      : '';
   }
 };
 
