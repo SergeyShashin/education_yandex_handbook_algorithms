@@ -69,6 +69,8 @@ const sunFlower = {
   sizesArraysUnicue: null,
   objWithArraysUnicue: null,
   validationMsgs: null,
+  core: null,
+  petals: null,
   setings: {
     minQuantityArraysUnicue: 2,
     maxQuantityArraysUnicue: 200000,
@@ -78,6 +80,9 @@ const sunFlower = {
     this.objWithArraysUnicue = {};
     this.sizesArraysUnicue = [];
     this.validationMsgs = [];
+    this.core = [];
+    this.petals = [];
+
     this.inputData.split('_').map((raw, strNum) => {
       strNum === 0
         ? this.quantityArraysUnicue = Number(raw)
@@ -86,16 +91,33 @@ const sunFlower = {
             ? this.sizesArraysUnicue.push(Number(char))
             : this.objWithArraysUnicue[strNum] ? this.objWithArraysUnicue[strNum].push(Number(char)) : this.objWithArraysUnicue[strNum] = [Number(char)];
         });
-
     });
 
     console.log('Входные данные\n', this.inputData);
     console.log('Количество множеств', this.quantityArraysUnicue);
     console.log('Размры множеств', this.sizesArraysUnicue);
-    console.log(this.objWithArraysUnicue);
+    console.log('Множества', this.objWithArraysUnicue);
 
     this.validation();
-    console.log(this.validationMsgs);
+    console.log('Сообщения об ошибках при валидации', this.validationMsgs);
+    this.setCore();
+    console.log('Ядро', this.core);
+  },
+  setCore() {
+    const defineCore = {};
+    for (let el of this.objWithArraysUnicue[1]) {
+      for (let i = 2; i < this.quantityArraysUnicue + 1; i++) {
+        if (this.objWithArraysUnicue[i].includes(el)) {
+          defineCore[el] ? defineCore[el]++ : defineCore[el] = 1;
+        }
+      }
+    }
+
+    for (let key in defineCore) {
+      if (defineCore[key] === this.quantityArraysUnicue - 1) {
+        this.core.push(Number(key));
+      }
+    }
   },
   validation() {
     // Первая строка содержит целое число n (2<=n<=2*10**5) - количество множеств.
@@ -108,7 +130,7 @@ const sunFlower = {
     this.quantityArraysUnicue > this.setings.maxQuantityArraysUnicue
       ? this.validationMsgs.push(`Максимальное количество множеств ожидается меньше ${this.setings.maxQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
       : '';
-  }
+  },
 };
 
 
