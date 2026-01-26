@@ -71,6 +71,7 @@ const sunFlower = {
   validationMsgs: null,
   core: null,
   petals: null,
+  isSunflower: null,
   setings: {
     minQuantityArraysUnicue: 2,
     maxQuantityArraysUnicue: 200000,
@@ -102,6 +103,7 @@ const sunFlower = {
     console.log('Сообщения об ошибках при валидации', this.validationMsgs);
     this.setCore();
     console.log('Ядро', this.core);
+    this.setPetals();
   },
   setCore() {
     const defineCore = {};
