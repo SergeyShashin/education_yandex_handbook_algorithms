@@ -71,7 +71,9 @@ const sunFlower = {
   validationMsgs: null,
   core: null,
   petals: null,
-  isSunflower: null,
+  petalsLength: null,
+  flagSunflower: null,
+  output: null,
   setings: {
     minQuantityArraysUnicue: 2,
     maxQuantityArraysUnicue: 200000,
@@ -82,7 +84,8 @@ const sunFlower = {
     this.sizesArraysUnicue = [];
     this.validationMsgs = [];
     this.core = [];
-    this.petals = [];
+    this.petalsLength = [];
+    this.petals = {};
 
     this.inputData.split('_').map((raw, strNum) => {
       strNum === 0
@@ -104,6 +107,33 @@ const sunFlower = {
     this.setCore();
     console.log('Ядро', this.core);
     this.setPetals();
+    this.setPetalsLength();
+    this.flagSunflower = this.isSunflower();
+    console.log('Подсолнечник', this.flagSunflower);
+
+    if (this.flagSunflower) {
+      this.output = `YES\n${this.core.length}\n${this.petalsLength.join(' ')}`;
+    } else {
+      this.output = 'NO';
+    }
+
+    console.log(this.output);
+  },
+  isSunflower() {
+    return this.core.length > 0 && (Object.values(this.petals)).length > 0;
+  },
+  setPetalsLength() {
+    Object.values(this.petals).map(el => this.petalsLength.push(el.length));
+  },
+  setPetals() {
+    Object.values(this.objWithArraysUnicue).map((arr, idx) => arr.map(numInarr => {
+      if (!this.core.includes(numInarr)) {
+        this.petals[idx] ? this.petals[idx].push(numInarr) : this.petals[idx] = [numInarr];
+      } else {
+        this.petals[idx] ? '' : this.petals[idx] = [];
+      }
+    }));
+    console.log(this.petals);
   },
   setCore() {
     const defineCore = {};
