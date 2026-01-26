@@ -60,7 +60,6 @@ NO
 
 */
 
-
 document.getElementById('loadInput').addEventListener('change', e => handleLoadFile(e));
 
 const sunFlower = {
@@ -69,20 +68,27 @@ const sunFlower = {
   sizesArraysUnicue: null,
   objWithArraysUnicue: null,
   validationMsgs: null,
+  sumAllNumbersArraysUnicue: null,
   core: null,
   petals: null,
   petalsLength: null,
   flagSunflower: null,
   output: null,
-  setings: {
+  settings: {
     minQuantityArraysUnicue: 2,
     maxQuantityArraysUnicue: 200000,
+    minSizeArraysUnicue: 0,
+    maxSizeArraysUnicue: 200000,
+    minX: 1,
+    maxX: 10 ** 9,
+    maxSumAllNumbersArraysUnicue: 200000,
   },
   run(data) {
     this.inputData = data;
     this.objWithArraysUnicue = {};
     this.sizesArraysUnicue = [];
     this.validationMsgs = [];
+    this.sumAllNumbersArraysUnicue = 0;
     this.core = [];
     this.petalsLength = [];
     this.petals = {};
@@ -97,19 +103,19 @@ const sunFlower = {
         });
     });
 
-    console.log('Входные данные\n', this.inputData);
-    console.log('Количество множеств', this.quantityArraysUnicue);
-    console.log('Размры множеств', this.sizesArraysUnicue);
-    console.log('Множества', this.objWithArraysUnicue);
+    // console.log('Входные данные\n', this.inputData);
+    // console.log('Количество множеств', this.quantityArraysUnicue);
+    // console.log('Размры множеств', this.sizesArraysUnicue);
+    // console.log('Множества', this.objWithArraysUnicue);
 
     this.validation();
     console.log('Сообщения об ошибках при валидации', this.validationMsgs);
     this.setCore();
-    console.log('Ядро', this.core);
+    // console.log('Ядро', this.core);
     this.setPetals();
     this.setPetalsLength();
     this.flagSunflower = this.isSunflower();
-    console.log('Подсолнечник', this.flagSunflower);
+    // console.log('Подсолнечник', this.flagSunflower);
 
     if (this.flagSunflower) {
       this.output = `YES\n${this.core.length}\n${this.petalsLength.join(' ')}`;
@@ -118,6 +124,30 @@ const sunFlower = {
     }
 
     console.log(this.output);
+    this.saveOutput();
+  },
+  saveOutput() {
+    //Сохранение файла в браузере (клиентская часть)
+    //Современный способ (showSaveFilePicker)
+    saveFile(this.output, 'output.txt');
+    async function saveFile(content, filename) {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+      });
+      const writable = await handle.createWritable();
+      await writable.write(content);
+      await writable.close();
+    }
+
+    //Классический способ (через ссылку <a>)
+    // const blob = new Blob([this.output], { type: 'text/plain' });
+    // const url = URL.createObjectURL(blob);
+    // const link = document.createElement('a');
+    // link.href = url;
+    // link.download = 'output.txt';
+    // link.click();
+    // URL.revokeObjectURL(url);
+
   },
   isSunflower() {
     return this.core.length > 0 && (Object.values(this.petals)).length > 0;
@@ -133,13 +163,13 @@ const sunFlower = {
         this.petals[idx] ? '' : this.petals[idx] = [];
       }
     }));
-    console.log(this.petals);
+    // console.log(this.petals);
   },
   setCore() {
     const defineCore = {};
     for (let el of this.objWithArraysUnicue[1]) {
       for (let i = 2; i < this.quantityArraysUnicue + 1; i++) {
-        if (this.objWithArraysUnicue[i].includes(el)) {
+        if (this.objWithArraysUnicue[i] && this.objWithArraysUnicue[i].includes(el)) {
           defineCore[el] ? defineCore[el]++ : defineCore[el] = 1;
         }
       }
@@ -152,19 +182,38 @@ const sunFlower = {
     }
   },
   validation() {
-    // Первая строка содержит целое число n (2<=n<=2*10**5) - количество множеств.
-    // Далее следуют n строк: в i-ой строке сначала дано k[i] (0<=k[i]<=2*10**5) - размеры множества, затем
     // k[i], различных чисел x (1<=x<=10**9) - элементы Si.
     // Гарантируется, что суммарное число всех элементов k[i] <= 2*10**5.
-    this.quantityArraysUnicue < this.setings.minQuantityArraysUnicue
-      ? this.validationMsgs.push(`Минимальное количество множеств ожидается больше ${this.setings.minQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
+    this.quantityArraysUnicue < this.settings.minQuantityArraysUnicue
+      ? this.validationMsgs.push(`Минимальное количество множеств ожидается больше ${this.settings.minQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
       : '';
-    this.quantityArraysUnicue > this.setings.maxQuantityArraysUnicue
-      ? this.validationMsgs.push(`Максимальное количество множеств ожидается меньше ${this.setings.maxQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
+    this.quantityArraysUnicue > this.settings.maxQuantityArraysUnicue
+      ? this.validationMsgs.push(`Максимальное количество множеств ожидается меньше ${this.settings.maxQuantityArraysUnicue + 1}, а сейчас ${this.quantityArraysUnicue}.`)
+      : '';
+    this.sizesArraysUnicue.map(k => {
+      console.log(k, this.settings.minSizeArraysUnicue);
+      k < this.settings.minSizeArraysUnicue
+        ? this.validationMsgs.push(`Минимальный размер множества ожидается больше ${this.settings.minSizeArraysUnicue}, а сейчас ${k}.`)
+        : '';
+      k > this.settings.maxSizeArraysUnicue
+        ? this.validationMsgs.push(`Максимальный размер множества ожидается меньше ${this.settings.maxSizeArraysUnicue + 1}, а сейчас ${k}.`)
+        : '';
+    });
+    Object.values(this.objWithArraysUnicue).map(arr => arr.map(x => {
+      this.sumAllNumbersArraysUnicue += x;
+      x < this.settings.minX
+        ? this.validationMsgs.push(`Минимальное число в множестве ожидается больше ${this.settings.minX}, а сейчас ${x}.`)
+        : '';
+      x > this.settings.maxX
+        ? this.validationMsgs.push(`Максимальное число в множестве ожидается больше ${this.settings.maxX}, а сейчас ${x}.`)
+        : '';
+    }
+    ));
+    this.sumAllNumbersArraysUnicue > this.settings.maxSumAllNumbersArraysUnicue
+      ? this.validationMsgs.push(`Максимальная сумма чисел во всех множествах ожидается меньше ${this.settings.maxSumAllNumbersArraysUnicue + 1}, а сейчас ${this.sumAllNumbersArraysUnicue}.`)
       : '';
   },
 };
-
 
 function handleLoadFile(e) {
 
