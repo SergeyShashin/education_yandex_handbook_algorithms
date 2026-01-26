@@ -60,8 +60,27 @@ NO
 
 */
 
+/**
+ * Устанавливает обработчик загрузки файла 
+ */
 document.getElementById('loadInput').addEventListener('change', e => handleLoadFile(e));
 
+/**
+ * Определяет подсолнечник.
+ * @type {Object}
+ * @property {String} inputData Входные данные из файла input.txt
+ * @property {Number} quantityArraysUnicue Количество множеств.
+ * @property {Array} sizesArraysUnicue Размеры множеств.
+ * @property {Object} objWithArraysUnicue Множества.
+ * @property {Array} validationMsgs Сообщения об ошибках во входных данных.
+ * @property {Number} sumAllNumbersArraysUnicue Сумма всех чисел множеств.
+ * @property {Array} core Ядро.
+ * @property {Object} petals Листья.
+ * @property {Array} petalsLength Длина листьев.
+ * @property {Boolean} flagSunflower true - если подсолнечник.
+ * @property {String} output Итоговое сообщение.
+ * @property {Object} settings Настройки.
+*/
 const sunFlower = {
   inputData: null,
   quantityArraysUnicue: null,
@@ -74,6 +93,16 @@ const sunFlower = {
   petalsLength: null,
   flagSunflower: null,
   output: null,
+  /**
+   * @property {Number} minQuantityArraysUnicue Минимальное количество множеств.
+   * @property {Number} minQuantityArraysUnicue Максимальное количество множеств.
+   * @property {Number} minSizeArraysUnicue Минимальный размер множества.
+   * @property {Number} maxSizeArraysUnicue Максимальный размер множества.
+   * @property {Number} minX Минимальное число в множестве.
+   * @property {Number} maxX Максимальное число в множестве.
+   * @property {Number} maxSumAllNumbersArraysUnicue Максимальная сумма чисел во всех множествах.
+   * @property {String} outputFileName Имя файла с результатом.
+   */
   settings: {
     minQuantityArraysUnicue: 2,
     maxQuantityArraysUnicue: 200000,
@@ -81,18 +110,15 @@ const sunFlower = {
     maxSizeArraysUnicue: 200000,
     minX: 1,
     maxX: 10 ** 9,
-    maxSumAllNumbersArraysUnicue: 200000,
+    maxSumAllNumbersArraysUnicue: 200001,
+    outputFileName: 'ouput.txt'
   },
+  /**
+   * Запуск
+   * @param {String} data Входные данные  
+   */
   run(data) {
-    this.inputData = data;
-    this.objWithArraysUnicue = {};
-    this.sizesArraysUnicue = [];
-    this.validationMsgs = [];
-    this.sumAllNumbersArraysUnicue = 0;
-    this.core = [];
-    this.petalsLength = [];
-    this.petals = {};
-
+    this.init(data);
     this.inputData.split('_').map((raw, strNum) => {
       strNum === 0
         ? this.quantityArraysUnicue = Number(raw)
@@ -103,19 +129,12 @@ const sunFlower = {
         });
     });
 
-    // console.log('Входные данные\n', this.inputData);
-    // console.log('Количество множеств', this.quantityArraysUnicue);
-    // console.log('Размры множеств', this.sizesArraysUnicue);
-    // console.log('Множества', this.objWithArraysUnicue);
-
     this.validation();
     console.log('Сообщения об ошибках при валидации', this.validationMsgs);
     this.setCore();
-    // console.log('Ядро', this.core);
     this.setPetals();
     this.setPetalsLength();
     this.flagSunflower = this.isSunflower();
-    // console.log('Подсолнечник', this.flagSunflower);
 
     if (this.flagSunflower) {
       this.output = `YES\n${this.core.length}\n${this.petalsLength.join(' ')}`;
@@ -126,10 +145,13 @@ const sunFlower = {
     console.log(this.output);
     this.saveOutput();
   },
+  /**
+   * Сохраняет результат в файл
+   */
   saveOutput() {
     //Сохранение файла в браузере (клиентская часть)
     //Современный способ (showSaveFilePicker)
-    saveFile(this.output, 'output.txt');
+    saveFile(this.output, this.settings.outputFileName);
     async function saveFile(content, filename) {
       const handle = await window.showSaveFilePicker({
         suggestedName: filename,
@@ -149,12 +171,22 @@ const sunFlower = {
     // URL.revokeObjectURL(url);
 
   },
+  /**
+   * Определяет подсолнечник или нет.
+   * @returns {Boolean} Возвращает true если подсолнечник
+   */
   isSunflower() {
     return this.core.length > 0 && (Object.values(this.petals)).length > 0;
   },
+  /**
+   * Устанавливает длину лепестков.
+   */
   setPetalsLength() {
     Object.values(this.petals).map(el => this.petalsLength.push(el.length));
   },
+  /**
+   * Устанавливает лепестки.
+   */
   setPetals() {
     Object.values(this.objWithArraysUnicue).map((arr, idx) => arr.map(numInarr => {
       if (!this.core.includes(numInarr)) {
@@ -163,8 +195,10 @@ const sunFlower = {
         this.petals[idx] ? '' : this.petals[idx] = [];
       }
     }));
-    // console.log(this.petals);
   },
+  /**
+   * Устанавливает ядро.
+   */
   setCore() {
     const defineCore = {};
     for (let el of this.objWithArraysUnicue[1]) {
@@ -181,9 +215,10 @@ const sunFlower = {
       }
     }
   },
+  /**
+   * Проверяет входные данные.
+   */
   validation() {
-    // k[i], различных чисел x (1<=x<=10**9) - элементы Si.
-    // Гарантируется, что суммарное число всех элементов k[i] <= 2*10**5.
     this.quantityArraysUnicue < this.settings.minQuantityArraysUnicue
       ? this.validationMsgs.push(`Минимальное количество множеств ожидается больше ${this.settings.minQuantityArraysUnicue}, а сейчас ${this.quantityArraysUnicue}.`)
       : '';
@@ -191,7 +226,6 @@ const sunFlower = {
       ? this.validationMsgs.push(`Максимальное количество множеств ожидается меньше ${this.settings.maxQuantityArraysUnicue + 1}, а сейчас ${this.quantityArraysUnicue}.`)
       : '';
     this.sizesArraysUnicue.map(k => {
-      console.log(k, this.settings.minSizeArraysUnicue);
       k < this.settings.minSizeArraysUnicue
         ? this.validationMsgs.push(`Минимальный размер множества ожидается больше ${this.settings.minSizeArraysUnicue}, а сейчас ${k}.`)
         : '';
@@ -210,13 +244,29 @@ const sunFlower = {
     }
     ));
     this.sumAllNumbersArraysUnicue > this.settings.maxSumAllNumbersArraysUnicue
-      ? this.validationMsgs.push(`Максимальная сумма чисел во всех множествах ожидается меньше ${this.settings.maxSumAllNumbersArraysUnicue + 1}, а сейчас ${this.sumAllNumbersArraysUnicue}.`)
+      ? this.validationMsgs.push(`Максимальная сумма чисел во всех множествах ожидается меньше ${this.settings.maxSumAllNumbersArraysUnicue}, а сейчас ${this.sumAllNumbersArraysUnicue}.`)
       : '';
   },
+  /**
+   * Инициализирует свойства sunFlower
+   * @param {String} data Входные данные 
+   */
+  init(data) {
+    this.inputData = data;
+    this.objWithArraysUnicue = {};
+    this.sizesArraysUnicue = [];
+    this.validationMsgs = [];
+    this.sumAllNumbersArraysUnicue = 0;
+    this.core = [];
+    this.petalsLength = [];
+    this.petals = {};
+  }
 };
-
+/**
+ * Обрабатывает событие после загрузки файла
+ * @param {Event} e Событие  
+ */
 function handleLoadFile(e) {
-
   let reader = new FileReader();
   reader.readAsText(e.target.files[0]);
 
