@@ -87,15 +87,13 @@ for (let i = 0; i < words.length - 1; i++) {
     let saveChar = currentWord[idxChar];
     currentWord[idxChar] = '.';
     let strForRgxp = [...currentWord].join('');
-    let rgxp = new RegExp(strForRgxp, 'i');
+    let rgxp = new RegExp(strForRgxp);
     for (let j = i + 1; j < words.length; j++) {
-      // console.log(rgxp);
-      // console.log(rgxp.test(words[j]));
       if (rgxp.test(words[j])) {
         counterTrue++;
       }
 
-      // console.log(currentWord, words[j]);
+      console.log(rgxp, rgxp.test(words[j]), currentWord, words[i], words[j]);
     }
     currentWord[idxChar] = saveChar;
   }
