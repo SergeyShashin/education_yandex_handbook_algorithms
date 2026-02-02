@@ -63,18 +63,18 @@ abb
 
 */
 
-// let str1 = prompt('Количество слов?', 5);
-// let str2 = prompt('Слова?', 'rom bom dom bot rot');
+let str1 = prompt('Количество слов?', 5);
+let str2 = prompt('Слова?', 'rom bom dom bot rot');
 // let str1 = prompt('Количество слов?', 3);
 // let str2 = prompt('Слова?', 'aa aa aa');
-let str1 = prompt('Количество слов?', 6);
-let str2 = prompt('Слова?', 'aaa aaB aBa Baa BBB abb');
+// let str1 = prompt('Количество слов?', 6);
+// let str2 = prompt('Слова?', 'aaa aaB aBa Baa BBB abb');
 
 let n = Number(str1);
 let words = [];
 let counterTrue = 0;
 
-str2.toLowerCase().split(' ').map(el => words.push(el));
+str2.split(' ').map(el => words.push(el));
 
 console.log(words, n);
 
