@@ -76,7 +76,7 @@ let counterTrue = 0;
 
 str2.split(' ').map(el => words.push(el));
 
-console.log(words, n);
+// console.log(words, n);
 
 for (let i = 0; i < words.length - 1; i++) {
   if (words[i] === words[i + 1]) {
@@ -93,10 +93,11 @@ for (let i = 0; i < words.length - 1; i++) {
         counterTrue++;
       }
 
-      console.log(rgxp, rgxp.test(words[j]), currentWord, words[i], words[j]);
+      // console.log(rgxp, rgxp.test(words[j]), currentWord, words[i], words[j]);
     }
     currentWord[idxChar] = saveChar;
   }
 }
 
 console.log(counterTrue);
+alert(counterTrue); 
