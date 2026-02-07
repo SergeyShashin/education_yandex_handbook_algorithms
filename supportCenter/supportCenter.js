@@ -14,11 +14,12 @@ di созданная на стадии формирования заявки и
 
 let n = ('Количество тикетов', 5);
 
-getTime(['3 5', '2 7', '3 4', '1 7', '2 1']);
+getTotalTime(['3 5', '2 7', '3 4', '1 7', '2 1']);
 
 
-function getTime(timeProcessingAndPriority) {
+function getTotalTime(timeProcessingAndPriority) {
   const priorityQueue = {};
+  let totalTime = 0;
 
   timeProcessingAndPriority.map(ticket => {
     let [timeProcessing, priority] = ticket.split(' ');
@@ -26,9 +27,13 @@ function getTime(timeProcessingAndPriority) {
     priority = Number(priority);
 
     priorityQueue[priority] ? priorityQueue[priority].push(timeProcessing) : priorityQueue[priority] = [timeProcessing];
-    console.log(priorityQueue);
-
   });
-}
 
-console.log('старт');
+  const priorities = Object.keys(priorityQueue);
+
+  while (priorities.length) {
+    let priority = priorities.pop();
+    console.log(priority);
+  }
+
+}
