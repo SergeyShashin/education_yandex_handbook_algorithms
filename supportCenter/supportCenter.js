@@ -12,14 +12,43 @@ di созданная на стадии формирования заявки и
 Требуется определить общее время разбора — момент, когда оба сотрудника завершат обработку всех тикетов.
 */
 
+class Employe {
+  constructor() {
+  }
+
+  status = 'free';
+
+  requestProcessing(timeForProcessing) {
+    let timer = setTimeout(() => {
+      this.setStatusFree();
+    }, timeForProcessing * 1000);
+  }
+
+  setStatusFree() {
+    this.status = 'free'
+  }
+
+  setStatusBusy() {
+    this.status = 'busy'
+  }
+
+  getStatus() {
+    return this.status;
+  }
+
+}
+
 let n = ('Количество тикетов', 5);
 
 getTotalTime(['3 5', '2 7', '3 4', '1 7', '2 1']);
 
 
+
+
 function getTotalTime(timeProcessingAndPriority) {
   const priorityQueue = {};
   let totalTime = 0;
+  let interval;
 
   timeProcessingAndPriority.map(ticket => {
     let [timeProcessing, priority] = ticket.split(' ');
@@ -31,9 +60,16 @@ function getTotalTime(timeProcessingAndPriority) {
 
   const priorities = Object.keys(priorityQueue);
 
-  while (priorities.length) {
-    let priority = priorities.pop();
-    console.log(priority);
-  }
+  let employee1 = new Employe();
+  let employee2 = new Employe();
+
+
+  interval = setInterval(() => {
+    console.log(employee1.getStatus());
+    console.log(employee2.getStatus());
+  }, 1000);
+
+
 
 }
+
