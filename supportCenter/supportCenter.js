@@ -57,7 +57,9 @@ function getTotalTime(timeProcessingAndPriority) {
   const priorityQueue = {};
   const arrWithTimeTicketsInOrderPriority = [];
   let T = 0;
-  let interval;
+  let timeWorkFirstEmployee = 0;
+  let timeWorkSecondEmployee = 0;
+  // let interval;
 
   timeProcessingAndPriority.map(ticket => {
     let [timeProcessing, priority] = ticket.split(' ');
@@ -78,33 +80,49 @@ function getTotalTime(timeProcessingAndPriority) {
   // console.log(priorityQueue);
   // console.log(arrWithTimeTicketsInOrderPriority);
 
-  let employee1 = new Employe();
-  let employee2 = new Employe();
-
-
-  interval = setInterval(() => {
-    if (arrWithTimeTicketsInOrderPriority.length === 0) {
-      clearInterval(interval);
-      // console.log(employee1.getTimeWork());
-      // console.log(employee2.getTimeWork());
-      T = Math.max(employee1.getTimeWork(), employee2.getTimeWork())
-      console.log('Общее время работы', T);
-      return T
-    } else {
-      console.log('У сотрудников есть tickets для обработки.');
+  while (arrWithTimeTicketsInOrderPriority.length) {
+    let firstTime = arrWithTimeTicketsInOrderPriority.pop();
+    timeWorkFirstEmployee += firstTime;
+    while (arrWithTimeTicketsInOrderPriority.length) {
+      let secondTime = arrWithTimeTicketsInOrderPriority.pop();
+      timeWorkSecondEmployee += secondTime;
+      if (firstTime - secondTime < 1) {
+        break;
+      }
     }
-    // console.log('Первый сотрудник', employee1.getStatus());
-    // console.log('Второй сотрудник', employee2.getStatus());
+  }
 
-    if (employee1.getStatus() === 'free') {
-      employee1.requestProcessing(arrWithTimeTicketsInOrderPriority.pop());
-    }
+  T = Math.max(timeWorkFirstEmployee, timeWorkSecondEmployee);
 
-    if (employee2.getStatus() === 'free') {
-      employee2.requestProcessing(arrWithTimeTicketsInOrderPriority.pop());
-    }
+  console.log(T);
+  alert(T);
 
-  }, 1000);
+  // let employee1 = new Employe();
+  // let employee2 = new Employe();
+
+  // interval = setInterval(() => {
+  //   if (arrWithTimeTicketsInOrderPriority.length === 0) {
+  //     clearInterval(interval);
+  //     // console.log(employee1.getTimeWork());
+  //     // console.log(employee2.getTimeWork());
+  //     T = Math.max(employee1.getTimeWork(), employee2.getTimeWork())
+  //     console.log('Общее время работы', T);
+  //     return T
+  //   } else {
+  //     console.log('У сотрудников есть tickets для обработки.');
+  //   }
+  //   // console.log('Первый сотрудник', employee1.getStatus());
+  //   // console.log('Второй сотрудник', employee2.getStatus());
+
+  //   if (employee1.getStatus() === 'free') {
+  //     employee1.requestProcessing(arrWithTimeTicketsInOrderPriority.pop());
+  //   }
+
+  //   if (employee2.getStatus() === 'free') {
+  //     employee2.requestProcessing(arrWithTimeTicketsInOrderPriority.pop());
+  //   }
+
+  // }, 1000);
 
 
 
