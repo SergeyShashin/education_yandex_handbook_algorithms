@@ -83,46 +83,56 @@ c1, c2, ..., ck (1 ≤ cj ≤ n) -- остановки на маршруте.
 
 Примечание
 Ограничения:
-2 ≤ n ≤ 1000 2≤n≤1000
+2 ≤ n ≤ 1000
 1 ≤ m ≤ 100
 2 ≤ ki ≤ 10 для всех i от 1 до m 
 */
 
 const graphFromRouteList = {
+  settings: {
+    numberStopsMin: 2,
+    numberStopsMax: 1000,
+    numberRoutesMin: 1,
+    numberRoutesMax: 100,
+    numberStopsOnRouteMin: 2,
+    numberStopsOnRouteMax: 10,
+    sumNumberStopsOnRouteMax: 1000,
+  },
   numberStopsAndNumberRoutes: null,
   numberStops: null,
   numberRoutes: null,
   numberStopsOnRouteAndRoutes: [],
+  sumNumberStopsOnRoute: 0,
   routes: [],
+  validationMsgs: [],
   adjacensyMatrixForDeterminingTimeBetweenStops: [],
   adjacensyMatrixForDeterminingMinimumNumberTransfers: [],
   result: null,
 
+
   run() {
     this.init();
-    // console.log(this.routes);
-    // console.log(this.numberStops, this.numberRoutes);
-    // console.log(this.adjacensyMatrixForDeterminingTimeBetweenStops);
-    // console.log(this.adjacensyMatrixForDeterminingMinimumNumberTransfers);
 
     this.setValueForAdjacensyMatrixForDeterminingTimeBetweenStops();
-    // console.log('Заполненная матрица смежности для определения времени между остановками', this.adjacensyMatrixForDeterminingTimeBetweenStops);
 
     this.setValueForAdjacensyMatrixForDeterminingMinimumNumberTransfers();
-    // console.log('Заполненная матрица для определения минимального количества пересадок', this.adjacensyMatrixForDeterminingMinimumNumberTransfers);
 
     this.result = [...this.adjacensyMatrixForDeterminingTimeBetweenStops, ...this.adjacensyMatrixForDeterminingMinimumNumberTransfers];
     this.result.map((el, idx) => this.result[idx] = el.join(' '));
     this.result = this.result.join('\n');
 
-    console.log(this.result);
-    alert(this.result);
+    this.output();
 
   },
 
   init() {
     this.inputData();
     this.fillMatrixZero();
+    this.validation();
+
+    if (this.validationMsgs.length > 0) {
+      this.validationMsgs.map(msg => console.error(msg));
+    }
   },
 
   inputData() {
@@ -147,7 +157,6 @@ const graphFromRouteList = {
     for (let routeIdx = 0; routeIdx < this.routes.length; routeIdx++) {
       let route = this.routes[routeIdx];
       for (let currentIdx = 0, nextIdx = 1; nextIdx < route.length; currentIdx++ , nextIdx++) {
-        console.log(route[currentIdx], route[nextIdx]);
         let contentCurrentIdx = Number(route[currentIdx]) - 1;
         let contentNextIdx = Number(route[nextIdx]) - 1;
         this.adjacensyMatrixForDeterminingTimeBetweenStops[contentCurrentIdx][contentNextIdx] = 1;
@@ -173,6 +182,35 @@ const graphFromRouteList = {
       }
     });
 
+  },
+
+  validation() {
+    if (this.numberStops < this.settings.numberStopsMin || this.numberStops > this.settings.numberStopsMax) {
+      this.validationMsgs.push(`Количество остановок сейчас ${this.numberStops}, а может быть от ${this.settings.numberStopsMin} до ${this.settings.numberStopsMax}.`);
+    }
+
+    if (this.numberRoutes < this.settings.numberRoutesMin || this.numberRoutes > this.settings.numberRoutesMax) {
+      this.validationMsgs.push(`Количество маршрутов сейчас ${this.numberRoutes}, а может быть от ${this.settings.numberRoutesMin} до ${this.settings.numberRoutesMax}.`);
+    }
+
+    this.routes.map(el => {
+      this.sumNumberStopsOnRoute += el.length;
+
+      if (el.length < this.settings.numberStopsOnRouteMin || el.length > this.settings.numberStopsOnRouteMax) {
+        this.validationMsgs.push(`Количество остановок на маршруте сейчас ${el.length}, а может быть от ${this.settings.numberStopsOnRouteMin} до ${this.settings.numberStopsOnRouteMax}.`);
+        return
+      }
+    });
+
+    if (this.sumNumberStopsOnRoute > this.settings.sumNumberStopsOnRouteMax) {
+      this.validationMsgs.push(`Сумма остановок на всех маршрутах сейчас ${this.sumNumberStopsOnRoute}, а может быть до ${this.settings.sumNumberStopsOnRouteMax}.`);
+    }
+
+  },
+
+  output() {
+    console.log(this.result);
+    alert(this.result);
   }
 
 }
