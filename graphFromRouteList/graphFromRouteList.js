@@ -96,25 +96,27 @@ const graphFromRouteList = {
   routes: [],
   adjacensyMatrixForDeterminingTimeBetweenStops: [],
   adjacensyMatrixForDeterminingMinimumNumberTransfers: [],
+  result: null,
 
   run() {
     this.init();
-    console.log(this.routes);
-    console.log(this.numberStops, this.numberRoutes);
-    console.log(this.adjacensyMatrixForDeterminingTimeBetweenStops);
-    console.log(this.adjacensyMatrixForDeterminingMinimumNumberTransfers);
+    // console.log(this.routes);
+    // console.log(this.numberStops, this.numberRoutes);
+    // console.log(this.adjacensyMatrixForDeterminingTimeBetweenStops);
+    // console.log(this.adjacensyMatrixForDeterminingMinimumNumberTransfers);
 
-    for (let routeIdx = 0; routeIdx < this.routes.length; routeIdx++) {
-      let route = this.routes[routeIdx];
-      for (let currentIdx = 0, nextIdx = 1; nextIdx < route.length; currentIdx++ , nextIdx++) {
-        console.log(route[currentIdx], route[nextIdx]);
-        let contentCurrentIdx = Number(route[currentIdx]) - 1;
-        let contentNextIdx = Number(route[nextIdx]) - 1;
-        this.adjacensyMatrixForDeterminingTimeBetweenStops[contentCurrentIdx][contentNextIdx] = 1;
-        this.adjacensyMatrixForDeterminingTimeBetweenStops[contentNextIdx][contentCurrentIdx] = 1;
-      }
-    }
-    console.log('Заполненная матрица смежности для определния времени между остановками', this.adjacensyMatrixForDeterminingTimeBetweenStops);
+    this.setValueForAdjacensyMatrixForDeterminingTimeBetweenStops();
+    // console.log('Заполненная матрица смежности для определения времени между остановками', this.adjacensyMatrixForDeterminingTimeBetweenStops);
+
+    this.setValueForAdjacensyMatrixForDeterminingMinimumNumberTransfers();
+    // console.log('Заполненная матрица для определения минимального количества пересадок', this.adjacensyMatrixForDeterminingMinimumNumberTransfers);
+
+    this.result = [...this.adjacensyMatrixForDeterminingTimeBetweenStops, ...this.adjacensyMatrixForDeterminingMinimumNumberTransfers];
+    this.result.map((el, idx) => this.result[idx] = el.join(' '));
+    this.result = this.result.join('\n');
+
+    console.log(this.result);
+    alert(this.result);
 
   },
 
@@ -133,14 +135,44 @@ const graphFromRouteList = {
       this.numberStopsOnRouteAndRoutes[i] = prompt('Количество остановок и маршрут?', '3 1 2 3');
       this.routes[i] = [...this.numberStopsOnRouteAndRoutes[i].split(' ')].slice(1);
     }
-
   },
 
   fillMatrixZero() {
     for (let i = 0; i < this.numberStops; i++) {
       this.adjacensyMatrixForDeterminingTimeBetweenStops.push(new Array(this.numberStops).fill(0));
-      this.adjacensyMatrixForDeterminingMinimumNumberTransfers.push(new Array(this.numberStops).fill(0));
     }
+  },
+
+  setValueForAdjacensyMatrixForDeterminingTimeBetweenStops() {
+    for (let routeIdx = 0; routeIdx < this.routes.length; routeIdx++) {
+      let route = this.routes[routeIdx];
+      for (let currentIdx = 0, nextIdx = 1; nextIdx < route.length; currentIdx++ , nextIdx++) {
+        console.log(route[currentIdx], route[nextIdx]);
+        let contentCurrentIdx = Number(route[currentIdx]) - 1;
+        let contentNextIdx = Number(route[nextIdx]) - 1;
+        this.adjacensyMatrixForDeterminingTimeBetweenStops[contentCurrentIdx][contentNextIdx] = 1;
+        this.adjacensyMatrixForDeterminingTimeBetweenStops[contentNextIdx][contentCurrentIdx] = 1;
+      }
+    }
+  },
+
+  setValueForAdjacensyMatrixForDeterminingMinimumNumberTransfers() {
+    this.adjacensyMatrixForDeterminingTimeBetweenStops.map(el =>
+      this.adjacensyMatrixForDeterminingMinimumNumberTransfers.push([...el]));
+
+    this.routes.map(el => {
+      if (el.length > 2) {
+        for (let i = 0; i + 2 < el.length; i++) {
+          let currentContentIdx = Number(el[i]) - 1;
+          for (let j = i + 2; j < el.length; j++) {
+            let nextContentIdx = Number(el[j]) - 1;
+            this.adjacensyMatrixForDeterminingMinimumNumberTransfers[currentContentIdx][nextContentIdx] = 1;
+            this.adjacensyMatrixForDeterminingMinimumNumberTransfers[nextContentIdx][currentContentIdx] = 1;
+          }
+        }
+      }
+    });
+
   }
 
 }
