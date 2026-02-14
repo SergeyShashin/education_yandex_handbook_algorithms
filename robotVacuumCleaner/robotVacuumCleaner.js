@@ -90,13 +90,14 @@ const robotVacuumCleaner = {
   positionStartC: null,
   numberActions: null,
   actions: null,
-  numberCellsVisitedRobot: 1,
+  numberCellsVisitedRobot: 0,
   positionRobotAfterExecuteCommands: null,
   direction: 'up',
 
   run() {
     this.init();
     this.executeCommands();
+    this.output();
   },
 
   init() {
@@ -104,26 +105,21 @@ const robotVacuumCleaner = {
     [this.length, this.width] = this.lengthAndWidth.split(' ');
     this.length = Number(this.length);
     this.width = Number(this.width);
-    console.log('Длина, ширина', this.length, this.width);
 
     this.roomPlanInit();
-    console.log('План комнаты', this.roomPlan);
-    console.log('Ячейки', this.roomCells);
 
     this.robotInit();
-    console.log('Стартовая позиция робота', this.positionStartC, this.positionStartR);
 
     this.numberActions = Number(prompt('Количество действий робота?', 6));
-    console.log('Количество действий робота', this.numberActions);
 
     this.actions = prompt('Команды для робота?', 'RMLLMM');
-    console.log('Команды для робота', this.actions);
 
   },
 
   roomPlanInit() {
     this.roomPlan = [];
     this.roomCells = {};
+
     for (let row = 0; row < this.length; row++) {
       this.roomPlan[row] = [];
       for (let col = 0; col < this.width; col++) {
@@ -146,14 +142,20 @@ const robotVacuumCleaner = {
       row: this.positionStartR,
       col: this.positionStartC,
     };
-    console.log('Позиция робота после выполнения команд', this.positionRobotAfterExecuteCommands);
 
     for (let i = 0; i < this.actions.length; i++) {
       let command = this.actions[i];
-      console.log('Команда', command);
       this.setDirection(command);
-      console.log('Направление после команды', this.direction);
+      let nextPosition = this.getNextPosition();
+      if (this.canStep(nextPosition)) {
+        this.numberCellsVisitedRobot++;
+        this.positionRobotAfterExecuteCommands = {
+          row: nextPosition.row,
+          col: nextPosition.col,
+        };
+      }
     }
+
   },
 
   setDirection(command) {
@@ -183,6 +185,32 @@ const robotVacuumCleaner = {
       case 'M':
         break;
     }
+  },
+
+  getNextPosition() {
+    switch (this.direction) {
+      case 'up':
+        return { row: this.positionRobotAfterExecuteCommands.row - 1, col: this.positionRobotAfterExecuteCommands.col }
+      case 'down':
+        return { row: this.positionRobotAfterExecuteCommands.row + 1, col: this.positionRobotAfterExecuteCommands.col }
+      case 'right':
+        return { row: this.positionRobotAfterExecuteCommands.row, col: this.positionRobotAfterExecuteCommands.col + 1 }
+      case 'left':
+        return { row: this.positionRobotAfterExecuteCommands.row, col: this.positionRobotAfterExecuteCommands.col - 1 }
+    }
+  },
+
+  canStep(nextPosition) {
+    return this.roomCells[`${nextPosition.row}${nextPosition.col}`] === '.'
+      && nextPosition.row > -1
+      && nextPosition.col > -1
+      && nextPosition.row < this.length
+      && nextPosition.row < this.width
+  },
+
+  output() {
+    console.log(this.numberCellsVisitedRobot);
+    alert(this.numberCellsVisitedRobot);
   }
 
 }
