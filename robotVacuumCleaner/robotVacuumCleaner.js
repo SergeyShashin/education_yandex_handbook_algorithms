@@ -22,20 +22,20 @@
 Если в ходе выполнения действий робот-пылесос пытается выехать за границу комнаты (упирается в стенку)
  или пытается заехать на мебель, то он остается на месте.
 
-Изначально, робот пылесос находится в пустой клетке ( r , c ) (r,c) и повернут вверх.
+Изначально, робот пылесос находится в пустой клетке (r,c) и повернут вверх.
 Посчитайте количество клеток, которые посетит робот пылесос, включая стартовую.
 
 Формат ввода
 
 В первой строке заданы два числа n, m -- размер комнаты.
 
-В следующих n n строках задан план комнаты. Если j j-я клетка в i i-й строке занята,
- то s i , j = si,j​= #. Если же j j-я клетка в i i-й строке свободна, то s i , j = si,j​= ..
+В следующих n n строках задан план комнаты. Если j-я клетка в i-й строке занята,
+ то s i, j = si,j​= #. Если же j-я клетка в i-й строке свободна, то s i , j = si,j​= ..
 
 Далее даны два числа r и c -- стартовое положение робота-пылесоса.
 
 В следующей строке задано количество действий q робота-пылесоса.
-Далее следует строка длины q q, задающая действия пылесоса в порядке выполнения.
+Далее следует строка длины q, задающая действия пылесоса в порядке выполнения.
 
 Символ L задает поворот налево. Символ R задает поворот направо. Символ M задает движение вперёд.
 Формат вывода
@@ -84,6 +84,8 @@ const robotVacuumCleaner = {
   width: null,
   roomPlan: null,
   roomCels: null,
+  divergenceIndices: 1, //расхождения индексов массивы начинаются с 0 а не с 1
+  positionStartRC: null,
   positionStartR: null,
   positionStartC: null,
   numberActions: null,
@@ -97,17 +99,37 @@ const robotVacuumCleaner = {
     [this.length, this.width] = this.lengthAndWidth.split(' ');
     this.length = Number(this.length);
     this.width = Number(this.width);
-    console.log(this.length, this.width);
+    console.log('Длина, ширина', this.length, this.width);
+
     this.roomPlanInit();
+    console.log('План комнаты', this.roomPlan);
+    console.log('Ячейки', this.roomCels);
+
+    this.robotInit();
+    console.log('Стартовая позиция робота', this.positionStartC, this.positionStartR);
+
+    this.numberActions = Number(prompt('Количество действий робота?', 6));
+    console.log('Количество действий робота', this.numberActions);
   },
 
   roomPlanInit() {
     this.roomPlan = [];
     this.roomCels = {};
     for (let row = 0; row < this.length; row++) {
-      for (let col = 0; col < this.length; col++) {
+      this.roomPlan[row] = [];
+      for (let col = 0; col < this.width; col++) {
+        this.roomPlan[row][col] = prompt(`${row}${col}. Если занята, напечатайте #`, '#');
+        this.roomPlan[row][col] === '#' ? '' : this.roomPlan[row][col] = '.';
+        this.roomCels[`${row}${col}`] = this.roomPlan[row][col];
       }
     }
+  },
+
+  robotInit() {
+    this.positionStartRC = prompt('Стартовая позиция робота?', '2 2');
+    [this.positionStartR, this.positionStartC] = this.positionStartRC.split(' ');
+    this.positionStartR = Number(this.positionStartR) - this.divergenceIndices;
+    this.positionStartC = Number(this.positionStartC) - this.divergenceIndices;
   }
 }
 
