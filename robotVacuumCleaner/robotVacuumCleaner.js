@@ -83,15 +83,20 @@ const robotVacuumCleaner = {
   length: null,
   width: null,
   roomPlan: null,
-  roomCels: null,
+  roomCells: null,
   divergenceIndices: 1, //расхождения индексов массивы начинаются с 0 а не с 1
   positionStartRC: null,
   positionStartR: null,
   positionStartC: null,
   numberActions: null,
+  actions: null,
+  numberCellsVisitedRobot: 1,
+  positionRobotAfterExecuteCommands: null,
+  direction: 'up',
 
   run() {
     this.init();
+    this.executeCommands();
   },
 
   init() {
@@ -103,24 +108,28 @@ const robotVacuumCleaner = {
 
     this.roomPlanInit();
     console.log('План комнаты', this.roomPlan);
-    console.log('Ячейки', this.roomCels);
+    console.log('Ячейки', this.roomCells);
 
     this.robotInit();
     console.log('Стартовая позиция робота', this.positionStartC, this.positionStartR);
 
     this.numberActions = Number(prompt('Количество действий робота?', 6));
     console.log('Количество действий робота', this.numberActions);
+
+    this.actions = prompt('Команды для робота?', 'RMLLMM');
+    console.log('Команды для робота', this.actions);
+
   },
 
   roomPlanInit() {
     this.roomPlan = [];
-    this.roomCels = {};
+    this.roomCells = {};
     for (let row = 0; row < this.length; row++) {
       this.roomPlan[row] = [];
       for (let col = 0; col < this.width; col++) {
         this.roomPlan[row][col] = prompt(`${row}${col}. Если занята, напечатайте #`, '#');
         this.roomPlan[row][col] === '#' ? '' : this.roomPlan[row][col] = '.';
-        this.roomCels[`${row}${col}`] = this.roomPlan[row][col];
+        this.roomCells[`${row}${col}`] = this.roomPlan[row][col];
       }
     }
   },
@@ -130,7 +139,52 @@ const robotVacuumCleaner = {
     [this.positionStartR, this.positionStartC] = this.positionStartRC.split(' ');
     this.positionStartR = Number(this.positionStartR) - this.divergenceIndices;
     this.positionStartC = Number(this.positionStartC) - this.divergenceIndices;
+  },
+
+  executeCommands() {
+    this.positionRobotAfterExecuteCommands = {
+      row: this.positionStartR,
+      col: this.positionStartC,
+    };
+    console.log('Позиция робота после выполнения команд', this.positionRobotAfterExecuteCommands);
+
+    for (let i = 0; i < this.actions.length; i++) {
+      let command = this.actions[i];
+      console.log('Команда', command);
+      this.setDirection(command);
+      console.log('Направление после команды', this.direction);
+    }
+  },
+
+  setDirection(command) {
+    switch (command) {
+      case 'R':
+        if (this.direction === 'up') {
+          this.direction = 'right';
+        } else if (this.direction === 'right') {
+          this.direction = 'down';
+        } else if (this.direction === 'down') {
+          this.direction = 'left';
+        } else if (this.direction === 'left') {
+          this.direction = 'up';
+        }
+        break;
+      case 'L':
+        if (this.direction === 'up') {
+          this.direction = 'left';
+        } else if (this.direction === 'left') {
+          this.direction = 'down';
+        } else if (this.direction === 'down') {
+          this.direction = 'right';
+        } else if (this.direction === 'right') {
+          this.direction = 'up';
+        }
+        break;
+      case 'M':
+        break;
+    }
   }
+
 }
 
 robotVacuumCleaner.run();
