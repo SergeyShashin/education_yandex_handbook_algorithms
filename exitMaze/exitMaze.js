@@ -154,7 +154,11 @@ const exitMaze = {
     }
     console.log(this.positionFinish, this.positionStart);
     this.setDifference();
-    this.defineNextStep();
+
+    while (!this.isTargetachieved()) {
+      this.defineNextStep();
+      this.setDifference();
+    }
   },
   init() {
     this.rowsAndColumns = prompt('Количество строк и колонок?', str1);
@@ -177,10 +181,7 @@ const exitMaze = {
     this.differenceSF.col = this.positionStart.col - this.positionFinish.col
   },
   defineNextStep() {
-
-    if (this.differenceSF.row === 0 && this.differenceSF.col === 0) {
-      alert('Лабиринт пройден.');
-    } else if (this.differenceSF.row === 0) {
+    if (this.differenceSF.row === 0) {
       alert('Определиться влево или вправо.');
     } else if (this.differenceSF.col === 0) {
       alert('Определиться вверх или вниз.');
@@ -194,6 +195,9 @@ const exitMaze = {
   },
   upOrDown() {
     return this.differenceSF.row > 0 ? 'up' : 'down'
+  },
+  isTargetachieved() {
+    return this.differenceSF.row === 0 && this.differenceSF.col === 0
   }
 };
 
