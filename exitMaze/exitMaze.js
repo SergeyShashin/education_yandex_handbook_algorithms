@@ -132,27 +132,37 @@ const exitMaze = {
     col: null,
   },
   differenceSF: {
-    row: null,
-    col: null,
+    numbersRow: null,
+    numbersCol: null,
   },
+  canMoveCels: {},
+  canAchieveF: true,
   commands: null,
   run() {
     this.init();
     for (let row = 0; this.finishFound === null || this.startFound === null; row++) {
-      let colFinish = this.inputDataMap[row].indexOf('F');
-      let colStart = this.inputDataMap[row].indexOf('S');
-      if (colFinish !== -1) {
-        this.finishFound = true;
-        this.positionFinish.row = row;
-        this.positionFinish.col = colFinish;
-      }
-      if (colStart !== -1) {
-        this.startFound = true;
-        this.positionStart.row = row;
-        this.positionStart.col = colStart;
+      for (let col = 0; col < this.inputDataMap[row].length; col++) {
+        if (this.inputDataMap[row][col] === '.') {
+          this.canMoveCels[`row${row}_col${col}`] = '.';
+        }
+        if (this.inputDataMap[row][col] === 'F') {
+          this.finishFound = true;
+          this.positionFinish.row = row;
+          this.positionFinish.col = col;
+          this.canMoveCels[`row${row}_col${col}`] = 'F';
+        }
+        if (this.inputDataMap[row][col] === 'S') {
+          this.startFound = true;
+          this.positionStart.row = row;
+          this.positionStart.col = col;
+          this.canMoveCels[`row${row}_col${col}`] = 'S';
+        }
       }
     }
     console.log(this.positionFinish, this.positionStart);
+    console.log(this.canMoveCels);
+
+    this.getDirectionForNextStep();
 
   },
   init() {
@@ -171,6 +181,11 @@ const exitMaze = {
       this.inputDataMap.push(prompt('Строка карты?', forInputDataMap[i]).split(''));
     }
   },
+
+  getDirectionForNextStep() {
+    let directionForNextStep;
+
+  }
 
 };
 
