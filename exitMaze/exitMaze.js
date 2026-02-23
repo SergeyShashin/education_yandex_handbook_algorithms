@@ -174,7 +174,6 @@ const exitMaze = {
       this.setDifferenceSF();
       console.log('Кол-во строк и колонок до цели =', this.differenceSF);
 
-      console.log(this.getDirectionForNextStep());
       let direction = this.getDirectionForNextStep();
       let nextStep = this.getNextStep(direction);
 
@@ -182,6 +181,7 @@ const exitMaze = {
         this.makeStep(nextStep);
         this.commands.push(direction);
       } else {
+        console.log(direction);
         console.log('Нужно принимать решение');
       }
 
