@@ -131,13 +131,17 @@ const exitMaze = {
     row: null,
     col: null,
   },
+  movePosition: {
+    row: null,
+    col: null,
+  },
   differenceSF: {
     numbersRow: null,
     numbersCol: null,
   },
   canMoveCels: {},
   canAchieveF: true,
-  commands: null,
+  commands: [],
   run() {
     this.init();
     for (let row = 0; this.finishFound === null || this.startFound === null; row++) {
@@ -159,10 +163,31 @@ const exitMaze = {
         }
       }
     }
-    console.log(this.positionFinish, this.positionStart);
-    console.log(this.canMoveCels);
+    console.log('Цель =', this.positionFinish, 'Старт=', this.positionStart);
+    console.log('Координаты, где можно передвигаться', this.canMoveCels);
+    this.movePosition.row = this.positionStart.row;
+    this.movePosition.col = this.positionStart.col;
+    console.log('Перемещаемая позиция', this.movePosition);
+    let counter = 0;
+    while ((this.movePosition.row !== this.positionFinish.row || this.movePosition.col !== this.positionFinish.col) && counter < 2) {
+      ++counter;
+      this.setDifferenceSF();
+      console.log('Кол-во строк и колонок до цели =', this.differenceSF);
 
-    this.getDirectionForNextStep();
+      console.log(this.getDirectionForNextStep());
+      let direction = this.getDirectionForNextStep();
+      let nextStep = this.getNextStep(direction);
+
+      if (this.canStep(nextStep)) {
+        this.makeStep(nextStep);
+        this.commands.push(direction);
+      } else {
+        console.log('Нужно принимать решение');
+      }
+
+      console.log('Команды', this.commands);
+      console.log('Позиция после шага', this.movePosition);
+    }
 
   },
   init() {
@@ -181,10 +206,69 @@ const exitMaze = {
       this.inputDataMap.push(prompt('Строка карты?', forInputDataMap[i]).split(''));
     }
   },
+  setDifferenceSF() {
+    this.differenceSF.numbersRow = Math.abs(this.movePosition.row - this.positionFinish.row);
+    this.differenceSF.numbersCol = Math.abs(this.movePosition.col - this.positionFinish.col);
+  },
 
   getDirectionForNextStep() {
     let directionForNextStep;
+    if (this.differenceSF.numbersRow < this.differenceSF.numbersCol && this.differenceSF.numbersRow !== 0) {
+      directionForNextStep = this.getUpOrDown();
+    } else {
+      directionForNextStep = this.getRightOrLeft();
+    }
+    return directionForNextStep
+  },
 
+  getUpOrDown() {
+    if (this.movePosition.row < this.positionFinish.row) {
+      return 'down';
+    } else if (this.movePosition.row > this.positionFinish.row) {
+      return 'up';
+    }
+  },
+
+  getNextStep(direction) {
+    let nextStep = {
+      row: this.movePosition.row,
+      col: this.movePosition.col,
+    }
+    switch (direction) {
+      case 'up':
+        nextStep.row--;
+        break;
+      case 'down':
+        nextStep.row++;
+        break;
+      case 'left':
+        nextStep.col--;
+        break;
+      case 'right':
+        nextStep.col++;
+        break;
+    }
+
+    return nextStep
+
+  },
+
+  getRightOrLeft() {
+    if (this.movePosition.col < this.positionFinish.col) {
+      return 'right'
+    } else if (this.movePosition.col > this.positionFinish.col) {
+      return 'left'
+    }
+  },
+
+  canStep(nextStep) {
+    let content = this.inputDataMap[nextStep.row][nextStep.col];
+    return content === '.' || content === 'F';
+  },
+
+  makeStep(nextStep) {
+    this.movePosition.row = nextStep.row;
+    this.movePosition.col = nextStep.col;
   }
 
 };
